@@ -235,7 +235,7 @@ theorem add_iSup {ι : Sort v} [Nonempty ι] (l : ι → Language α) (m : Langu
     (m + ⨆ i, l i) = ⨆ i, m + l i :=
   sup_iSup
 
-theorem iSup_sub {ι : Sort v} [Nonempty ι] (l : ι → Language α) (m : Language α) :
+theorem iSup_sub {ι : Sort v} (l : ι → Language α) (m : Language α) :
     (⨆ i, l i) - m = ⨆ i, l i - m :=
   iUnion_diff _ _
 
