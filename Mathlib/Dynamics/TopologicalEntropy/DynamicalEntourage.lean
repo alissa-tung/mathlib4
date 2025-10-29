@@ -40,7 +40,7 @@ namespace Dynamics
 open Prod Set UniformSpace
 open scoped SetRel Topology Uniformity
 
-variable {X : Type*} {T : X → X} {U : SetRel X X} {n : ℕ} {x y : X}
+variable {X : Type*} {T : X → X} {U V : SetRel X X} {n : ℕ} {x y : X}
 
 /-- The dynamical entourage associated to a transformation `T`, entourage `U` and time `n`
 is the entourage where `x` and `y` are close iff `T^[k] x` and `T^[k] y` are `U`-close
