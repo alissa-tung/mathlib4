@@ -86,7 +86,7 @@ lemma IsDynCoverOf.preimage (h : Semiconj φ S T) [V.IsSymm] {t : Finset Y}
   rw [comp_apply, ball_preimage, (f_section (g i) (gs_cover i i_s).2).2]
   refine preimage_mono fun x x_i ↦ mem_ball_dynEntourage_comp T n x (g i) ⟨i, ?_⟩
   replace gs_cover := (gs_cover i i_s).1
-  rw [mem_ball_symmetry V_symm.dynEntourage] at x_i gs_cover
+  rw [mem_ball_symmetry] at x_i gs_cover
   exact ⟨x_i, gs_cover⟩
 
 lemma le_coverMincard_image (h : Semiconj φ S T) (F : Set X) [V.IsSymm] (n : ℕ) :
@@ -98,14 +98,14 @@ lemma le_coverMincard_image (h : Semiconj φ S T) (F : Set X) [V.IsSymm] (n : �
   rw [← t_card]
   exact s_cover.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s_card)
 
-lemma coverMincard_image_le (h : Semiconj φ S T) (F : Set X) (hV : IsSymmetricRel V) (n : ℕ) :
+lemma coverMincard_image_le (h : Semiconj φ S T) (F : Set X) (n : ℕ) :
     coverMincard T (φ '' F) V n ≤ coverMincard S F ((map φ φ) ⁻¹' V) n := by
   classical
   rcases eq_top_or_lt_top (coverMincard S F ((map φ φ) ⁻¹' V) n) with h' | h'
   · exact h' ▸ le_top
   obtain ⟨s, s_cover, s_card⟩ := (coverMincard_finite_iff S F ((map φ φ) ⁻¹' V) n).1 h'
   rw [← s_card]
-  have := s_cover.image h hV
+  have := s_cover.image h
   rw [← s.coe_image] at this
   exact this.coverMincard_le_card.trans (WithTop.coe_le_coe.2 s.card_image_le)
 
@@ -119,11 +119,11 @@ lemma le_coverEntropyInfEntourage_image (h : Semiconj φ S T) (F : Set X) [V.IsS
     coverEntropyInfEntourage S F ((map φ φ) ⁻¹' (V ○ V)) ≤ coverEntropyInfEntourage T (φ '' F) V :=
   expGrowthInf_monotone fun n ↦ ENat.toENNReal_mono (le_coverMincard_image h F n)
 
-lemma coverEntropyEntourage_image_le (h : Semiconj φ S T) (F : Set X) (hV : IsSymmetricRel V) :
+lemma coverEntropyEntourage_image_le (h : Semiconj φ S T) (F : Set X) :
     coverEntropyEntourage T (φ '' F) V ≤ coverEntropyEntourage S F ((map φ φ) ⁻¹' V) :=
   expGrowthSup_monotone fun n ↦ ENat.toENNReal_mono (coverMincard_image_le h F V n)
 
-lemma coverEntropyInfEntourage_image_le (h : Semiconj φ S T) (F : Set X) (hV : IsSymmetricRel V) :
+lemma coverEntropyInfEntourage_image_le (h : Semiconj φ S T) (F : Set X) :
     coverEntropyInfEntourage T (φ '' F) V ≤ coverEntropyInfEntourage S F ((map φ φ) ⁻¹' V) :=
   expGrowthInf_monotone fun n ↦ ENat.toENNReal_mono (coverMincard_image_le h F V n)
 
