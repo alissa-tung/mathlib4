@@ -236,7 +236,7 @@ lemma coverMincard_finite_iff (T : X → X) (F : Set X) (U : SetRel X X) (n : �
   exact key
 
 @[simp]
-lemma coverMincard_empty {n : ℕ} : coverMincard T ∅ U n = 0 :=
+lemma coverMincard_empty : coverMincard T ∅ U n = 0 :=
   (sInf_le (by simp [IsDynCoverOf])).antisymm (zero_le (coverMincard T ∅ U n))
 
 lemma coverMincard_eq_zero_iff (T : X → X) (F : Set X) (U : SetRel X X) (n : ℕ) :
@@ -298,8 +298,8 @@ lemma coverMincard_finite_of_isCompact_invariant [UniformSpace X] (F_comp : IsCo
 /-- All dynamical balls of a minimal dynamical cover of `F` intersect `F`. This lemma is the key
   to relate Bowen-Dinaburg's definition of topological entropy with covers and their definition
   of topological entropy with nets. -/
-lemma nonempty_inter_of_coverMincard [U.IsSymm] {n : ℕ}
-    {s : Finset X} (h : IsDynCoverOf T F U n s) (h' : #s = coverMincard T F U n) :
+lemma nonempty_inter_of_coverMincard [U.IsSymm] {s : Finset X} (h : IsDynCoverOf T F U n s)
+    (h' : #s = coverMincard T F U n) :
     ∀ x ∈ s, (F ∩ ball x (dynEntourage T U n)).Nonempty := by
   -- Otherwise, there is a ball which does not intersect `F`. Removing it yields a smaller cover.
   classical
@@ -380,8 +380,8 @@ lemma coverEntropyInfEntourage_univ (T : X → X) (h : F.Nonempty) :
   rw [← expGrowthInf_const one_ne_zero one_ne_top, coverEntropyInfEntourage]
   simp only [coverMincard_univ T h, ENat.toENNReal_one]
 
-lemma coverEntropyEntourage_le_log_coverMincard_div (F_inv : MapsTo T F F)
-    [U.IsSymm] {n : ℕ} (n_pos : n ≠ 0) :
+lemma coverEntropyEntourage_le_log_coverMincard_div (F_inv : MapsTo T F F) [U.IsSymm]
+    (n_pos : n ≠ 0) :
     coverEntropyEntourage T F (U ○ U) ≤ log (coverMincard T F U n) / n := by
   have cv_mono : Monotone fun m ↦ (coverMincard T F (U ○ U) m).toENNReal :=
     fun _ _ k_m ↦ ENat.toENNReal_mono (coverMincard_monotone_time T F (U ○ U) k_m)
@@ -394,16 +394,14 @@ lemma coverEntropyEntourage_le_log_coverMincard_div (F_inv : MapsTo T F F)
   rw [← ENat.toENNReal_pow]
   exact ENat.toENNReal_mono (coverMincard_mul_le_pow F_inv n m)
 
-lemma IsDynCoverOf.coverEntropyEntourage_le_log_card_div
-    (F_inv : MapsTo T F F) [U.IsSymm] {n : ℕ} (n_pos : n ≠ 0)
-    {s : Finset X} (h : IsDynCoverOf T F U n s) :
+lemma IsDynCoverOf.coverEntropyEntourage_le_log_card_div (F_inv : MapsTo T F F) [U.IsSymm]
+    (n_pos : n ≠ 0) {s : Finset X} (h : IsDynCoverOf T F U n s) :
     coverEntropyEntourage T F (U ○ U) ≤ log s.card / n := by
   apply (coverEntropyEntourage_le_log_coverMincard_div F_inv n_pos).trans
   apply monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone _)
   exact_mod_cast coverMincard_le_card h
 
-lemma coverEntropyEntourage_le_coverEntropyInfEntourage
-    (F_inv : MapsTo T F F) [U.IsSymm] :
+lemma coverEntropyEntourage_le_coverEntropyInfEntourage (F_inv : MapsTo T F F) [U.IsSymm] :
     coverEntropyEntourage T F (U ○ U) ≤ coverEntropyInfEntourage T F U := by
   refine (le_liminf_of_le) (eventually_atTop.2 ⟨1, fun m m_pos ↦ ?_⟩)
   exact coverEntropyEntourage_le_log_coverMincard_div F_inv (Nat.one_le_iff_ne_zero.1 m_pos)
