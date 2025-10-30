@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Johannes Hölzl, Mario Carneiro, Patrick Massot
 -/
 import Mathlib.Algebra.Group.Defs
-import Mathlib.Data.Rel
+import Mathlib.Data.Rel.Cover
 import Mathlib.Order.Filter.Tendsto
 import Mathlib.Tactic.Monotonicity.Basic
 import Mathlib.Topology.Order
@@ -653,6 +653,12 @@ theorem mem_comp_comp {V W M : SetRel β β} [W.IsSymm] {p : β × β} :
   · rintro ⟨⟨w, z⟩, ⟨w_in, z_in⟩, hwz⟩
     rw [mem_ball_symmetry] at z_in
     exact ⟨z, ⟨w, w_in, hwz⟩, z_in⟩
+
+lemma isCover_iff_subset_iUnion_ball {U : SetRel β β} [U.IsSymm] {s N : Set β} :
+    U.IsCover s N ↔ s ⊆ ⋃ y ∈ N, ball y U := by
+  simp [SetRel.IsCover, subset_def, ball, U.comm]
+
+alias ⟨IsCover.subset_iUnion_ball, IsCover.of_subset_iUnion_ball⟩ := isCover_iff_subset_iUnion_ball
 
 end UniformSpace
 

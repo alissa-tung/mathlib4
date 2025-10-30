@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yaël Dillies
 -/
 import Mathlib.Data.Rel.Separated
-import Mathlib.Topology.UniformSpace.Defs
 
 /-!
 # Covers in a uniform space
@@ -24,7 +23,7 @@ The concept of uniform covers is used to define two further notions of covering:
 [R. Vershynin, *High Dimensional Probability*][vershynin2018high], Section 4.2.
 -/
 
-open Set UniformSpace
+open Set
 
 namespace SetRel
 variable {X : Type*} {U V : SetRel X X} {s t N N₁ N₂ : Set X} {x : X}
@@ -55,11 +54,6 @@ lemma IsCover.anti (hst : s ⊆ t) (ht : IsCover U t N) : IsCover U s N := fun _
 
 lemma IsCover.mono_entourage (hUV : U ⊆ V) (hU : IsCover U s N) : IsCover V s N :=
   fun _x hx ↦ let ⟨y, hy, hxy⟩ := hU hx; ⟨y, hy, hUV hxy⟩
-
-lemma isCover_iff_subset_iUnion_ball [U.IsSymm] : IsCover U s N ↔ s ⊆ ⋃ y ∈ N, ball y U := by
-  simp [IsCover, subset_def, ball, U.comm]
-
-alias ⟨IsCover.subset_iUnion_ball, IsCover.of_subset_iUnion_ball⟩ := isCover_iff_subset_iUnion_ball
 
 /-- A maximal `U`-separated subset of a set `s` is a `U`-cover of `s`.
 
